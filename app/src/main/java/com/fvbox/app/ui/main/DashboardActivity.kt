@@ -22,25 +22,27 @@ import com.fvbox.app.ui.local.AppInstallReceiver
 import com.fvbox.app.ui.local.LocalAppActivity
 import com.fvbox.app.ui.setting.PreferenceActivity
 import com.fvbox.app.ui.tab.UserSelectActivity
+import com.fvbox.databinding.ActivityDashboardBinding
 import com.fvbox.databinding.ActivityMainBinding
 import com.fvbox.databinding.ViewMainHeaderBinding
+import com.fvbox.util.Log
 import com.fvbox.util.property.viewBinding
 import com.fvbox.util.showSnackBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.permissionx.guolindev.PermissionX
 import org.json.JSONObject
 
-class MainActivity : BaseActivity() {
+class DashboardActivity : BaseActivity() {
 
-    private val binding by viewBinding(ActivityMainBinding::bind)
+    private val binding by viewBinding(ActivityDashboardBinding::bind)
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<DashboardViewModel>()
 
     private var currentUserID = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_dashboard)
         setUpToolbar(R.string.app_name)
         initDrawerLayout()
         initOtherView()
@@ -78,18 +80,19 @@ class MainActivity : BaseActivity() {
 
     private fun initOtherView() {
         binding.fab.setOnClickListener {
-            LocalAppActivity.start(this, viewModel.userChangeLiveData.value?.userID)
+            LocalAppActivity.start(this, -1)
         }
     }
 
     private fun observeData() {
         viewModel.boxActionState.observe(this, boxActionStateObserver)
-        viewModel.userChangeLiveData.observe(this) {
-            toolbar.title = it.userName
+
+//        viewModel.userChangeLiveData.observe(this) {
+            toolbar.title = "Dashboard"
             toolbar.subtitle = getString(R.string.app_name)
-            BoxConfig.currentUserID = it.userID
-            currentUserID = it.userID
-        }
+            BoxConfig.currentUserID = 0
+            currentUserID = 0
+//        }
 
     }
 
@@ -139,9 +142,12 @@ class MainActivity : BaseActivity() {
 //            R.id.main_telegram -> {
 //                startBrowser("https://t.me/dualmeta")
 //            }
-            R.id.dashboard -> {
-                DashboardActivity.start(this)
+            R.id.space -> {
+                MainActivity.start(this)
             }
+//            R.id.space -> {
+//                MainActivity.start(this)
+//            }
         }
 
     }
@@ -186,27 +192,30 @@ class MainActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        return viewModel.getAppsList();
+
         when (requestCode) {
             UserSelectActivity.REQUEST_CODE -> {
-
                 if (resultCode == UserSelectActivity.RESULT_EMPTY) {
-                    viewModel.getUserList()
+//                    viewModel.getUserList()
                 } else if (data != null) {
                     if (currentUserID != currentUserID(data)) {
-                        viewModel.changeUser(currentUserID(data))
+//                        viewModel.changeUser(currentUserID(data))
                     }
                 }
             }
 
             LocalAppActivity.REQUEST_CODE -> {
                 if (data != null) {
-                    viewModel.changeUser(currentUserID(data))
+//                    android.util.Log.e(TAG, "=== "+data.toString())
+//                    viewModel.changeUser(currentUserID(data))
+                    viewModel.getAppsList()
                 }
             }
 
             AppInfoActivity.REQUEST_CODE -> {
                 if (resultCode == AppInfoActivity.RESULT_UNINSTALL) {
-                    viewModel.changeUser(currentUserID)
+//                    viewModel.changeUser(currentUserID)
                 }
             }
         }
@@ -242,10 +251,10 @@ class MainActivity : BaseActivity() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
+        private const val TAG = "DashBoardActivity"
 
         fun start(activity: BaseActivity) {
-            val intent = Intent(activity, MainActivity::class.java)
+            val intent = Intent(activity, DashboardActivity::class.java)
             activity.startActivity(intent)
         }
     }

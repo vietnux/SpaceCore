@@ -1,6 +1,7 @@
 package com.fvbox.app.ui.box
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.activityViewModels
@@ -14,11 +15,15 @@ import com.fvbox.R
 import com.fvbox.app.base.BaseFragment
 import com.fvbox.app.ui.main.MainViewModel
 import com.fvbox.app.ui.info.AppInfoActivity
+import com.fvbox.app.ui.main.DashboardViewModel
+import com.fvbox.data.BoxRepository
 import com.fvbox.data.bean.box.BoxAppBean
+import com.fvbox.data.bean.box.BoxUserInfo
 import com.fvbox.data.state.BoxActionState
 import com.fvbox.data.state.BoxAppState
 import com.fvbox.data.state.BoxRequestPermissionState
 import com.fvbox.databinding.FragmentBoxAppsBinding
+import com.fvbox.lib.FCore
 import com.fvbox.util.CaptureUtil
 import com.fvbox.util.extension.showTwoStepDialog
 import com.fvbox.util.property.viewBinding
@@ -30,13 +35,13 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
-class BoxAppFragment : BaseFragment(R.layout.fragment_box_apps) {
+class BoxAppsFragment : BaseFragment(R.layout.fragment_box_apps) {
 
     private val binding by viewBinding(FragmentBoxAppsBinding::bind)
 
     private val viewModel by viewModels<BoxAppViewModel>()
 
-    private val activityViewModel by activityViewModels<MainViewModel>()
+    private val activityViewModel by activityViewModels<DashboardViewModel>()
 
     private val fastAdapter by lazy { FastItemAdapter<BoxAppsItem>() }
 
@@ -74,9 +79,13 @@ class BoxAppFragment : BaseFragment(R.layout.fragment_box_apps) {
     }
 
     private fun observeData() {
-
-        activityViewModel.userChangeLiveData.observe(viewLifecycleOwner) {
-            viewModel.loadBoxAppList(it.userID)
+//        Log.e("List User", FCore.get().getInstalledApplications() );
+//        var listUser = BoxRepository.getUserList();
+//        userList.clear()
+//        userList.addAll(BoxRepository.getUserList())
+        activityViewModel.appChangeLiveData.observe(viewLifecycleOwner) {
+//            viewModel.loadBoxAppList(it.userID)
+            viewModel.loadBoxAppsList();
         }
 
         viewModel.boxActionState.observe(viewLifecycleOwner) {
@@ -106,7 +115,7 @@ class BoxAppFragment : BaseFragment(R.layout.fragment_box_apps) {
                 is BoxAppState.Empty -> {
                     binding.stateView.showEmpty()
                     fastAdapter.clear()
-                    CaptureUtil.deleteCapture(currentUserID())
+//                    CaptureUtil.deleteCapture(currentUserID())
                     //空数据就把截图删了
                     //因为截图是取上半部分，但是空界面是居中的，截取出来是不完整的
                 }
@@ -179,23 +188,23 @@ class BoxAppFragment : BaseFragment(R.layout.fragment_box_apps) {
     private val captureID = AtomicInteger()
 
     private fun capture() {
-        val userID = currentUserID()
-        lifecycleScope.launch {
-            val mCaptureID = captureID.incrementAndGet()
-            delay(500)
-            //延迟500，等界面刷新完成
-            if (captureID.get() == mCaptureID) {
-                val activityContent = requireActivity().findViewById<View>(android.R.id.content)
-                CaptureUtil.captureView(requireActivity().window, activityContent)
-                //背景
-                CaptureUtil.captureView(requireActivity().window, binding.root, userID)
-            }
-        }
+//        val userID = currentUserID()
+//        lifecycleScope.launch {
+//            val mCaptureID = captureID.incrementAndGet()
+//            delay(500)
+//            //延迟500，等界面刷新完成
+//            if (captureID.get() == mCaptureID) {
+//                val activityContent = requireActivity().findViewById<View>(android.R.id.content)
+//                CaptureUtil.captureView(requireActivity().window, activityContent)
+//                //背景
+//                CaptureUtil.captureView(requireActivity().window, binding.root, userID)
+//            }
+//        }
     }
 
-    private fun currentUserID(): Int {
-        return activityViewModel.userChangeLiveData.value?.userID ?: 0
-    }
+//    private fun currentUserID(): Int {
+//        return activityViewModel.appChangeLiveData.value?.userID ?: 0
+//    }
 
 
 }

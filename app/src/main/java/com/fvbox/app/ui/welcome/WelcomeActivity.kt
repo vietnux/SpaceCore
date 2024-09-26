@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.fvbox.R
 import com.fvbox.app.base.BaseActivity
+import com.fvbox.app.ui.main.DashboardActivity
 import com.fvbox.app.ui.main.MainActivity
 import com.fvbox.util.showToast
 import com.permissionx.guolindev.PermissionX
@@ -33,13 +34,14 @@ class WelcomeActivity : BaseActivity() {
             }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         go()
     }
 
     private fun go() {
-        MainActivity.start(this)
+//        MainActivity.start(this)
+        DashboardActivity.start(this)
         finish()
     }
 }

@@ -25,6 +25,7 @@ object BoxRepository {
 
     /**
      * 初始化本地已安装应用列表
+     * Khởi tạo danh sách ứng dụng được cài đặt cục bộ
      */
     fun initLocalAppList() {
         GlobalScope.launch(Dispatchers.IO) {

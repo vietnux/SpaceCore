@@ -5,8 +5,9 @@ plugins {
 }
 
 android {
+    namespace "com.fvbox"
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+//    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.fvbox"
@@ -16,7 +17,7 @@ android {
         versionName "3.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        flavorDimensions "FV32"
+        flavorDimensions "D64"
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -84,6 +85,7 @@ android {
 
     buildFeatures {
         viewBinding true
+        buildConfig = true
     }
 
     compileOptions {
@@ -112,14 +114,14 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.12.0'
 
-    implementation "androidx.core:core-ktx:1.7.0"
+    implementation "androidx.core:core-ktx:1.13.1"
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
-    implementation "androidx.activity:activity-ktx:1.4.0"
-    implementation "androidx.fragment:fragment-ktx:1.4.1"
+    implementation "androidx.activity:activity-ktx:1.9.2"
+    implementation "androidx.fragment:fragment-ktx:1.8.3"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.preference:preference-ktx:1.2.0"
+    implementation "androidx.preference:preference-ktx:1.2.1"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"

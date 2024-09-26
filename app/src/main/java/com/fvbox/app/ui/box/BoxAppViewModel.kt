@@ -10,6 +10,7 @@ import com.fvbox.data.BackRepository
 import com.fvbox.data.BoxRepository
 import com.fvbox.data.PermissionRepository
 import com.fvbox.data.bean.box.BoxAppBean
+import com.fvbox.data.bean.box.BoxUserInfo
 import com.fvbox.data.state.BoxActionState
 import com.fvbox.data.state.BoxAppState
 import com.fvbox.data.state.BoxPermissionState
@@ -27,6 +28,30 @@ class BoxAppViewModel : BaseViewModel() {
 
     private val mPermissionListLiveData = MutableLiveData<BoxRequestPermissionState>()
     val appPermissionState: LiveData<BoxRequestPermissionState> = mPermissionListLiveData
+    private val userList: MutableList<BoxUserInfo?> = mutableListOf()
+    private var appList: MutableList<BoxAppBean> = mutableListOf()
+
+
+    fun loadBoxAppsList() {
+        appList.clear()
+        userList.clear()
+        userList.addAll(BoxRepository.getUserList())
+        userList.forEach {
+            if (it != null) {
+                mBoxAppLiveData.postValue(BoxAppState.Loading)
+//                freshBoxAppList(it.userID)
+                val list = BoxRepository.getBoxAppList(it.userID)
+                appList += list;
+            }
+        }
+        launchIO {
+            if (appList.isEmpty()) {
+                mBoxAppLiveData.postValue(BoxAppState.Empty)
+            } else {
+                mBoxAppLiveData.postValue(BoxAppState.Success(appList))
+            }
+        }
+    }
 
     /**
      * 首次加载列表，需要有加载事件

@@ -3,10 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+<!--    <item-->
+<!--        android:id="@+id/main_telegram"-->
+<!--        android:icon="@drawable/ic_feedback"-->
+<!--        android:title="@string/telegram" />-->
+
     <item
-        android:id="@+id/main_telegram"
-        android:icon="@drawable/ic_feedback"
-        android:title="@string/telegram" />
+        android:id="@+id/dashboard"
+        android:icon="@drawable/outline_space_dashboard_24"
+        android:title="@string/dashboard" />
+    <item
+        android:id="@+id/space"
+        android:icon="@drawable/baseline_space_bar_24"
+        android:title="@string/space" />
 
     <item
         android:id="@+id/main_exit_app"

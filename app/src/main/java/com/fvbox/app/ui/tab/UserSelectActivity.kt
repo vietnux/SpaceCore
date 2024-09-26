@@ -72,7 +72,7 @@ class UserSelectActivity : BaseActivity() {
     private val recyclerViewGestureDetector by lazy {
         GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
 
-            override fun onSingleTapUp(e: MotionEvent?): Boolean {
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
                 changeUserAndFinish()
                 return true
             }
