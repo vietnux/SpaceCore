@@ -40,5 +40,4 @@ abstract class BaseFragment(layoutID: Int) : Fragment(layoutID) {
     open fun <T> attachActivity(): T {
         return requireActivity() as T
     }
-
 }

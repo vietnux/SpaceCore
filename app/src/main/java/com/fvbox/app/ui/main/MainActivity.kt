@@ -135,6 +135,10 @@ class MainActivity : BaseActivity() {
             R.id.main_exit_app -> {
                 finish()
             }
+            R.id.main_clear_cache -> {
+                clearAppCache()
+                viewModel.changeUser(currentUserID)
+            }
 
 //            R.id.main_telegram -> {
 //                startBrowser("https://t.me/dualmeta")

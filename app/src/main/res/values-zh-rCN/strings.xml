@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">多元空间</string>
-    <string name="app_name_32">多元空间32</string>
+    <string name="app_name">双账户</string>
+    <string name="app_name_32">双账户32</string>
     <string name="done">确定</string>
     <string name="cancel">取消</string>
     <string name="open">打开</string>

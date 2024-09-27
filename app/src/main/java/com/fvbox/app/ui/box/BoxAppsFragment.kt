@@ -188,23 +188,23 @@ class BoxAppsFragment : BaseFragment(R.layout.fragment_box_apps) {
     private val captureID = AtomicInteger()
 
     private fun capture() {
-//        val userID = currentUserID()
-//        lifecycleScope.launch {
-//            val mCaptureID = captureID.incrementAndGet()
-//            delay(500)
-//            //延迟500，等界面刷新完成
-//            if (captureID.get() == mCaptureID) {
-//                val activityContent = requireActivity().findViewById<View>(android.R.id.content)
-//                CaptureUtil.captureView(requireActivity().window, activityContent)
-//                //背景
-//                CaptureUtil.captureView(requireActivity().window, binding.root, userID)
-//            }
-//        }
+        val userID = currentUserID()
+        lifecycleScope.launch {
+            val mCaptureID = captureID.incrementAndGet()
+            delay(500)
+            //延迟500，等界面刷新完成
+            if (captureID.get() == mCaptureID) {
+                val activityContent = requireActivity().findViewById<View>(android.R.id.content)
+                CaptureUtil.captureView(requireActivity().window, activityContent)
+                //背景
+                CaptureUtil.captureView(requireActivity().window, binding.root, userID)
+            }
+        }
     }
 
-//    private fun currentUserID(): Int {
-//        return activityViewModel.appChangeLiveData.value?.userID ?: 0
-//    }
+    private fun currentUserID(): Int {
+        return -1;//activityViewModel.appChangeLiveData.value?.userID ?: 0
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.fvbox.app.base
 import android.content.Context
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import com.fvbox.app.widget.LoadingDialog
 import com.fvbox.data.state.BoxActionState
 import com.fvbox.util.showSnackBar
 import com.gyf.immersionbar.ktx.immersionBar
+import java.io.File
 
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -123,6 +125,18 @@ abstract class BaseActivity : AppCompatActivity() {
                 dismissLoadingDialog()
                 showSnackBar(it.msg)
             }
+        }
+    }
+
+    // Hàm để xóa bộ nhớ đệm (cache)
+    fun clearAppCache() {
+        val cacheDir = cacheDir
+        val success = cacheDir.deleteRecursively()
+
+        if (success) {
+            showSnackBar( this.getString(R.string.clear_cache_finish) )
+        } else {
+            showSnackBar( "Failed to clear cache")
         }
     }
 

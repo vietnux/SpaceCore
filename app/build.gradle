@@ -10,11 +10,11 @@ android {
 //    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.fvbox"
+        applicationId "com.dualbox"
         minSdkVersion 23
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 34
-        versionName "3.4"
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         flavorDimensions "D64"
@@ -42,11 +42,11 @@ android {
         }
 
         D64 {
-            applicationId "space.dualmeta64"
+            applicationId "com.dualbox.parallel"
             ndk {
                 abiFilters "arm64-v8a"
             }
-//            resValue "string", "app_name", "多元空间"
+//            resValue "string", "app_name", "Parallel Dual Space"
             manifestPlaceholders = [appName      : "@string/app_name",
                                     APP_ICON      : "@mipmap/ic_launcher",
                                     APP_ROUND_ICON: "@mipmap/ic_launcher_round"]
@@ -157,3 +157,18 @@ dependencies {
 
     implementation 'com.elvishew:xlog:1.10.1'
 }
+
+preBuild.doFirst {
+    exec {
+        commandLine 'dot_clean', '.'
+    }
+}
+gradle.buildFinished {
+    exec {
+        commandLine 'dot_clean', '.'
+    }
+}
+task cleanHiddenFiles(type: Exec) {
+    commandLine 'find', '.', '-name', '._*', '-type', 'f', '-delete'
+}
+preBuild.dependsOn cleanHiddenFiles

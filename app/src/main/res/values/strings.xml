@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">DualMeta</string>
-    <string name="app_name_32">DualMeta32</string>
+    <string name="app_name">Dual Accounts</string>
+    <string name="app_name_32">Dual Accounts 32</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="open">Open</string>
@@ -15,6 +15,8 @@
     <string name="app_setting">Setting</string>
     <string name="release_memory">Release Memory</string>
     <string name="release_memory_finish">Release Successed</string>
+    <string name="clear_cache">Clear Cache</string>
+    <string name="clear_cache_finish">Cache cleared</string>
     <string name="delete_user_msg">Whether to delete the user and uninstall all the apps installed by him, the data will not be recovered！</string>
     <string name="empty_empty">Absolutely Empty</string>
     <string name="open_fail">Open Fail</string>

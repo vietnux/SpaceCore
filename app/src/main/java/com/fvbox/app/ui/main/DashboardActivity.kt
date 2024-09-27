@@ -5,10 +5,13 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.input
@@ -87,17 +90,25 @@ class DashboardActivity : BaseActivity() {
     private fun observeData() {
         viewModel.boxActionState.observe(this, boxActionStateObserver)
 
-//        viewModel.userChangeLiveData.observe(this) {
+        viewModel.appChangeLiveData.observe(this) {
             toolbar.title = "Dashboard"
             toolbar.subtitle = getString(R.string.app_name)
             BoxConfig.currentUserID = 0
             currentUserID = 0
-//        }
+        }
 
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        // Tìm menu item bằng ID và ẩn nó
+        val userMenuItem = menu?.findItem(R.id.main_name)
+        userMenuItem?.isEnabled = false // Ẩn menu
+        // Để đổi màu tiêu đề, bạn có thể sử dụng Spannable cho title
+        val title = SpannableString(userMenuItem?.title)
+        title.setSpan(ForegroundColorSpan(ContextCompat.getColor(this, R.color.textColorSecondary)), 0, title.length, 0)
+        userMenuItem?.title = title
         return true
     }
 
@@ -138,6 +149,10 @@ class DashboardActivity : BaseActivity() {
             R.id.main_exit_app -> {
                 finish()
             }
+            R.id.main_clear_cache -> {
+                clearAppCache()
+                viewModel.getAppsList()
+            }
 
 //            R.id.main_telegram -> {
 //                startBrowser("https://t.me/dualmeta")
@@ -145,9 +160,6 @@ class DashboardActivity : BaseActivity() {
             R.id.space -> {
                 MainActivity.start(this)
             }
-//            R.id.space -> {
-//                MainActivity.start(this)
-//            }
         }
 
     }
@@ -192,8 +204,8 @@ class DashboardActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        return viewModel.getAppsList();
-
+         return viewModel.getAppsList();
+//        android.util.Log.e(TAG, "=== "+requestCode)
         when (requestCode) {
             UserSelectActivity.REQUEST_CODE -> {
                 if (resultCode == UserSelectActivity.RESULT_EMPTY) {

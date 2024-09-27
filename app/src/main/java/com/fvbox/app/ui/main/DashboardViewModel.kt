@@ -32,23 +32,29 @@ class DashboardViewModel : BaseViewModel() {
     init {
         getAppsList()
     }
+
     /**
      * 没用户就创建
      * 有用户就post通知fragment
      */
     fun getAppsList() {
-        appList.clear()
-        userList.clear()
-        userList.addAll(BoxRepository.getUserList())
-        userList.forEach {
-            if (it != null) {
-                mAppChangeLiveData.postValue(BoxAppState.Loading)
-//                freshBoxAppList(it.userID)
-                val list = BoxRepository.getBoxAppList(it.userID)
-                appList += list;
-            }
-        }
         launchIO {
+            appList.clear()
+            userList.clear()
+            userList.addAll(BoxRepository.getUserList())
+            if (userList.isEmpty()) {
+                BoxRepository.createUser()
+            }
+
+            userList.forEach {
+                if (it != null) {
+                    mAppChangeLiveData.postValue(BoxAppState.Loading)
+//                freshBoxAppList(it.userID)
+                    val list = BoxRepository.getBoxAppList(it.userID)
+                    appList += list;
+                }
+            }
+
             if (appList.isEmpty()) {
                 mAppChangeLiveData.postValue(BoxAppState.Empty)
             } else {

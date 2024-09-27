@@ -1,14 +1,17 @@
 package com.fvbox.app.ui.install.select
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fvbox.R
 import com.fvbox.app.base.BaseFragment
 import com.fvbox.app.ui.install.BoxInstallViewModel
 import com.fvbox.app.ui.install.progress.InstallProgressFragment
+import com.fvbox.data.BoxRepository
 import com.fvbox.data.bean.box.BoxUserInfo
 import com.fvbox.data.bean.local.LocalAppBean
 import com.fvbox.data.state.BoxInstallUserState
@@ -34,7 +37,6 @@ class BoxInstallSelectFragment : BaseFragment(R.layout.fragment_box_install_sele
     private val userSelectHelper by lazy { userAdapter.getSelectExtension() }
 
     private val selectUserList = arrayListOf<BoxUserInfo>()
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -80,6 +82,9 @@ class BoxInstallSelectFragment : BaseFragment(R.layout.fragment_box_install_sele
                 binding.fab.isShow(selectUserList.isNotEmpty())
             }
         }
+        binding.addUser.setOnClickListener {
+            createUser()
+        }
     }
 
     private fun observeData() {
@@ -91,15 +96,15 @@ class BoxInstallSelectFragment : BaseFragment(R.layout.fragment_box_install_sele
 
                 is BoxInstallUserState.Empty -> {
                     binding.stateView.showEmpty()
-                    //理论上不会出现，挂个空界面得了
+                    //理论上不会出现，挂个空界面得了 = Về mặt lý thuyết nó sẽ không xuất hiện, chỉ để lại một giao diện trống.
                 }
 
                 is BoxInstallUserState.LoadSuccess -> {
                     binding.stateView.showContent()
-                    if (state.userList.size == 1) {
-                        startInstall(state.userList)
-                        return@observe
-                    }
+//                    if (state.userList.size == 1) { //auto install
+//                        startInstall(state.userList)
+//                        return@observe
+//                    }
 
                     initAppList(state.appList)
                     initUser(state.userList)
@@ -125,5 +130,11 @@ class BoxInstallSelectFragment : BaseFragment(R.layout.fragment_box_install_sele
             userAdapter.set(this)
         }
 
+    }
+
+    private fun createUser() {
+        BoxRepository.createUser()
+        val list = BoxRepository.getUserList()
+        initUser(list)
     }
 }
